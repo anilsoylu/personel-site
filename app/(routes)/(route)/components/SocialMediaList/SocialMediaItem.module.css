@@ -1,0 +1,89 @@
+.facebook {
+  background-color: #3b5998;
+}
+
+.facebook:hover {
+  background-color: white;
+  color: #2d4373;
+}
+
+.twitter {
+  background-color: #00acee;
+}
+
+.twitter:hover {
+  background-color: white;
+  color: #00acee;
+}
+
+.i̇nstagram {
+  background-color: #e4405f;
+}
+
+.i̇nstagram:hover {
+  background-color: white;
+  color: #e4405f;
+}
+
+.google {
+  background-color: #dd4b39;
+}
+
+.google:hover {
+  background-color: white;
+  color: #dd4b39;
+}
+
+.youtube {
+  background-color: #cd201f;
+}
+
+.youtube:hover {
+  background-color: white;
+  color: #cd201f;
+}
+
+.linkedin {
+  background-color: #007bb5;
+}
+
+.linkedin:hover {
+  background-color: white;
+  color: #007bb5;
+}
+
+.whatsapp {
+  background-color: #25d366;
+}
+
+.whatsapp:hover {
+  background-color: white;
+  color: #25d366;
+}
+
+.telegram {
+  background-color: #0088cc;
+}
+
+.telegram:hover {
+  background-color: white;
+  color: #0088cc;
+}
+
+.pinterest {
+  background-color: #cb2027;
+}
+
+.pinterest:hover {
+  background-color: white;
+  color: #cb2027;
+}
+
+.github {
+  background-color: #333333;
+}
+
+.github:hover {
+  background-color: white;
+  color: #333333;
+}
