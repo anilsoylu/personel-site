@@ -1,3 +1,11 @@
+## Web Site
+[`Web Site`](https://personel-site.vercel.app/)
+[`Dashboard`](https://personel-site.vercel.app/admpanel)
+
+User: Demo
+Password: Demo2023
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
