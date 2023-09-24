@@ -1,4 +1,3 @@
-import { Analytics } from "@vercel/analytics/react"
 import { ToastProvider } from "@/providers/toast-provider"
 import { ThemeProvider } from "@/providers/theme-provider"
 import Header from "./components/Header"
@@ -15,7 +14,6 @@ export default async function SetupLayout({
       <Header />
       <main className="flex flex-col container mx-auto">{children}</main>
       <Footer />
-      <Analytics />
     </ThemeProvider>
   )
 }
