@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
-
 import prismadb from "@/lib/prismadb"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
 
 export async function GET(req: NextRequest) {
   try {
@@ -54,6 +55,9 @@ export async function POST(req: Request) {
       statusText: "Subscription successful",
       headers: {
         "Content-Type": "application/json",
+        "Cache-Control": "public, s-maxage=1",
+        "CDN-Cache-Control": "public, s-maxage=60",
+        "Vercel-CDN-Cache-Control": "public, s-maxage=3600",
       },
     })
   } catch (err) {
@@ -81,9 +85,10 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
             message: "Email unsubscribed and deleted successfully",
           }),
           {
-            status: 200,
+            status: 201,
             headers: {
               "Content-Type": "application/json",
+              "Cache-Control": "no-cache, no-store, must-revalidate",
             },
           }
         )
@@ -94,6 +99,9 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
             status: 404,
             headers: {
               "Content-Type": "application/json",
+              "Cache-Control": "public, s-maxage=1",
+              "CDN-Cache-Control": "public, s-maxage=60",
+              "Vercel-CDN-Cache-Control": "public, s-maxage=3600",
             },
           }
         )

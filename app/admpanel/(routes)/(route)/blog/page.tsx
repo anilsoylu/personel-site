@@ -1,7 +1,8 @@
-import prismadb from "@/lib/prismadb"
 import { format } from "date-fns"
 import { Metadata } from "next"
 import { BlogClient } from "./components/client"
+import prismadb from "@/lib/prismadb"
+export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
   title: "Blog | Admin Dashboard v1.0",

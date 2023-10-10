@@ -2,6 +2,8 @@ import { TransformedBookmark } from "@/types/Bookmark"
 import BookmarkItem from "./BookmarkItem"
 import { getBookmarks } from "../../actions/get-bookmarks"
 
+export const dynamic = "force-dynamic"
+
 const BookmarkList = async () => {
   const bookmarks: TransformedBookmark[] | undefined = await getBookmarks()
 

@@ -1,8 +1,13 @@
-import prismadb from "@/lib/prismadb"
-import { format } from "date-fns"
-
+import { Metadata } from "next"
 import { SocialMediaClient } from "./components/client"
 import { SocialMedia } from "@/types/SocialMedia"
+import { format } from "date-fns"
+import prismadb from "@/lib/prismadb"
+export const dynamic = "force-dynamic"
+
+export const metadata: Metadata = {
+  title: "Bookmark | Admin Dashboard v1.0",
+}
 
 const SocialMediaPage = async () => {
   const socialmedias = await prismadb.socialMedia.findMany({

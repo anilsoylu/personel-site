@@ -24,7 +24,6 @@ import { Separator } from "@/components/ui/separator"
 import { Heading } from "@/components/ui/heading"
 import { AlertModal } from "@/components/modals/alert-modal"
 import { compare, hash } from "bcryptjs"
-import { useSession } from "next-auth/react"
 
 const formSchema = z.object({
   name: z.string().nullable(),
@@ -42,8 +41,6 @@ interface UserFormProps {
 export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
   const params = useParams()
   const router = useRouter()
-  const { data: session, status } = useSession()
-  const isDemo = session?.user?.username === "demo"
 
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -72,40 +69,34 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
   const onSubmit = async (data: UserFormValues) => {
     try {
       setLoading(true)
-      if (isDemo && status === "authenticated") {
-        toast.error(
-          "You are not authorized. This is a demo page. Please set up your own database."
-        )
-        setLoading(false)
+
+      toast.success(
+        data.hashedPassword === initialData?.hashedPassword
+          ? "Same password"
+          : "Different password"
+      )
+
+      let newPassword
+
+      if (data.hashedPassword === initialData?.hashedPassword) {
+        newPassword = initialData.hashedPassword
       } else {
-        toast.success(
-          data.hashedPassword === initialData?.hashedPassword
-            ? "Same password"
-            : "Different password"
-        )
-
-        let newPassword
-
-        if (data.hashedPassword === initialData?.hashedPassword) {
-          newPassword = initialData.hashedPassword
-        } else {
-          newPassword = await hash(data.hashedPassword, 12)
-        }
-
-        const postData = {
-          ...data,
-          hashedPassword: newPassword,
-        }
-
-        if (initialData) {
-          await axios.patch(`/api/user/${params.id}`, postData)
-        } else {
-          await axios.post(`/api/user`, postData)
-        }
-        router.refresh()
-        router.push(`/admpanel/users`)
-        toast.success(toastMessage)
+        newPassword = await hash(data.hashedPassword, 12)
       }
+
+      const postData = {
+        ...data,
+        hashedPassword: newPassword,
+      }
+
+      if (initialData) {
+        await axios.patch(`/api/user/${params.id}`, postData)
+      } else {
+        await axios.post(`/api/user`, postData)
+      }
+      router.refresh()
+      router.push(`/admpanel/users`)
+      toast.success(toastMessage)
     } catch (error: any) {
       toast.error("Something went wrong.")
     } finally {
@@ -116,17 +107,10 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true)
-      if (isDemo && status === "authenticated") {
-        toast.error(
-          "You are not authorized. This is a demo page. Please set up your own database."
-        )
-        setLoading(false)
-      } else {
-        await axios.delete(`/api/user/${params.id}`)
-        router.refresh()
-        router.push(`/admpanel/users`)
-        toast.success("User deleted.")
-      }
+      await axios.delete(`/api/user/${params.id}`)
+      router.refresh()
+      router.push(`/admpanel/users`)
+      toast.success("User deleted.")
     } catch (error: any) {
       toast.error("Something went wrong.")
     } finally {

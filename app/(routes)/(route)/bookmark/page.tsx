@@ -2,6 +2,8 @@ import { Metadata } from "next"
 import React from "react"
 import BookmarkList from "../components/BookMarks"
 
+export const dynamic = "force-dynamic"
+
 type Props = {}
 
 export const metadata: Metadata = {

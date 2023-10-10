@@ -14,7 +14,12 @@ export async function GET(
       },
     })
 
-    return NextResponse.json(user)
+    return NextResponse.json(JSON.stringify(user), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
   } catch (err) {
     console.log("[USER_GET]", err)
     return new NextResponse("Interal eror", { status: 500 })
@@ -66,7 +71,12 @@ export async function PATCH(
       },
     })
 
-    return NextResponse.json(user)
+    return NextResponse.json(JSON.stringify(user), {
+      status: 201,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
   } catch (err) {
     console.log("[USER_PATCH]", err)
     return new NextResponse("Interal eror", { status: 500 })
@@ -84,13 +94,18 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
-    await prismadb.user.delete({
+    const user = await prismadb.user.delete({
       where: {
         id: params.id,
       },
     })
 
-    return NextResponse.json({ message: "User deleted" })
+    return NextResponse.json(JSON.stringify(user), {
+      status: 201,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
   } catch (err) {
     console.log("[USER_DELETE]", err)
     return new NextResponse("Interal eror", { status: 500 })

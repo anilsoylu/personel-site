@@ -1,7 +1,8 @@
-import prismadb from "@/lib/prismadb"
-import { format } from "date-fns"
 import { Metadata } from "next"
 import { BookmarkClient } from "./components/client"
+import { format } from "date-fns"
+import prismadb from "@/lib/prismadb"
+export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
   title: "Bookmark | Admin Dashboard v1.0",

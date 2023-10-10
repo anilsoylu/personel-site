@@ -2,6 +2,8 @@ import { Metadata } from "next"
 import React from "react"
 import Blog from "../components/Blog"
 
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Anıl Soylu - Blog",
   description:

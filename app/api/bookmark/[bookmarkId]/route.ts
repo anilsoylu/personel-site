@@ -14,7 +14,12 @@ export async function GET(
       },
     })
 
-    return NextResponse.json(bookmark)
+    return NextResponse.json(bookmark, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
   } catch (err) {
     console.log("[Bookmark_GET]", err)
     return new NextResponse("Interal eror", { status: 500 })
@@ -68,5 +73,34 @@ export async function PATCH(
   } catch (err) {
     console.log("[Bookmark_PATCH]", err)
     return new NextResponse("Interal eror", { status: 500 })
+  }
+}
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { bookmarkId: string } }
+) {
+  try {
+    const session = await getServerSession({ req: NextRequest, ...authOptions })
+
+    if (!session) {
+      return new NextResponse("Unauthenticated", { status: 403 })
+    }
+
+    const bookmark = await prismadb.bookmark.delete({
+      where: {
+        bookmarkId: params.bookmarkId,
+      },
+    })
+
+    return NextResponse.json(JSON.stringify(bookmark), {
+      status: 201,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+  } catch (err) {
+    console.log("[BOOKMARK_DELETE", err)
+    return new NextResponse("Initial error", { status: 500 })
   }
 }

@@ -14,7 +14,12 @@ export async function GET(
       },
     })
 
-    return NextResponse.json(socialmedia)
+    return NextResponse.json(JSON.stringify(socialmedia), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
   } catch (err) {
     console.log("[SocialMedia_GET]", err)
     return new NextResponse("Interal eror", { status: 500 })
@@ -82,14 +87,17 @@ export async function DELETE(
       return new NextResponse("Unauthenticated", { status: 403 })
     }
 
-    await prismadb.socialMedia.delete({
+    const socialMedia = await prismadb.socialMedia.delete({
       where: {
         socialMediaId: params.socialMediaId,
       },
     })
 
-    return new NextResponse(null, {
-      status: 204,
+    return new NextResponse(JSON.stringify(socialMedia), {
+      status: 201,
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
   } catch (err) {
     console.log("[SOCIALMEDIA_DELETE]", err)

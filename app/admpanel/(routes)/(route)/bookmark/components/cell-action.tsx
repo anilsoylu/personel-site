@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { BookmarkColumn } from "./columns"
-import { useSession } from "next-auth/react"
 
 interface CellActionProps {
   data: BookmarkColumn
@@ -27,22 +26,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const router = useRouter()
-  const { data: session, status } = useSession()
-  const isDemo = session?.user?.username === "demo"
 
   const onConfirm = async () => {
     try {
       setLoading(true)
-      if (isDemo && status === "authenticated") {
-        toast.error(
-          "You are not authorized. This is a demo page. Please set up your own database."
-        )
-        setLoading(false)
-      } else {
-        await axios.delete(`/api/bookmark/${data.bookmarkId}`)
-        toast.success("Bookmark deleted.")
-        router.refresh()
-      }
+      await axios.delete(`/api/bookmark/${data.bookmarkId}`)
+      toast.success("Bookmark deleted.")
+      router.refresh()
     } catch (error) {
       toast.error("Something went wrong")
     } finally {

@@ -15,7 +15,12 @@ export async function GET() {
       },
     })
 
-    return NextResponse.json(blogPosts)
+    return NextResponse.json(blogPosts, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
   } catch (error) {
     console.log("[BLOG_GET]", error)
     return new NextResponse("Internal error", { status: 500 })

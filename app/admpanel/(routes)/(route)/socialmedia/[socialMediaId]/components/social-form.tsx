@@ -23,7 +23,6 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { Heading } from "@/components/ui/heading"
 import { AlertModal } from "@/components/modals/alert-modal"
-import { useSession } from "next-auth/react"
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -41,8 +40,6 @@ export const SocialMediaForm: React.FC<SocialMediaFormProps> = ({
 }) => {
   const params = useParams()
   const router = useRouter()
-  const { data: session, status } = useSession()
-  const isDemo = session?.user?.username === "demo"
 
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -74,28 +71,18 @@ export const SocialMediaForm: React.FC<SocialMediaFormProps> = ({
     try {
       setLoading(true)
 
-      if (isDemo && status === "authenticated") {
-        toast.error(
-          "You are not authorized. This is a demo page. Please set up your own database."
-        )
-        setLoading(false)
-      } else {
-        const postData = {
-          ...data,
-        }
-
-        if (initialData) {
-          await axios.patch(
-            `/api/socialmedia/${params.socialMediaId}`,
-            postData
-          )
-        } else {
-          await axios.post(`/api/socialmedia`, postData)
-        }
-        router.refresh()
-        router.push(`/admpanel/socialmedia`)
-        toast.success(toastMessage)
+      const postData = {
+        ...data,
       }
+
+      if (initialData) {
+        await axios.patch(`/api/socialmedia/${params.socialMediaId}`, postData)
+      } else {
+        await axios.post(`/api/socialmedia`, postData)
+      }
+      router.refresh()
+      router.push(`/admpanel/socialmedia`)
+      toast.success(toastMessage)
     } catch (error: any) {
       toast.error("Something went wrong.")
     } finally {
@@ -106,17 +93,10 @@ export const SocialMediaForm: React.FC<SocialMediaFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true)
-      if (isDemo && status === "authenticated") {
-        toast.error(
-          "You are not authorized. This is a demo page. Please set up your own database."
-        )
-        setLoading(false)
-      } else {
-        await axios.delete(`/api/socialmedia/${params.socialMediaId}`)
-        router.refresh()
-        router.push(`/admpanel/socialmedia`)
-        toast.success("Social Media deleted.")
-      }
+      await axios.delete(`/api/socialmedia/${params.socialMediaId}`)
+      router.refresh()
+      router.push(`/admpanel/socialmedia`)
+      toast.success("Social Media deleted.")
     } catch (error: any) {
       toast.error("Something went wrong.")
     } finally {

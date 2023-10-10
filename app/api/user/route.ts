@@ -11,7 +11,12 @@ export async function GET() {
       },
     })
 
-    return NextResponse.json(users)
+    return NextResponse.json(users, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
   } catch (err) {
     console.log("[USER_GET]", err)
     return new NextResponse("Internal error", { status: 500 })
@@ -51,7 +56,12 @@ export async function POST(req: Request) {
       },
     })
 
-    return NextResponse.json(user)
+    return NextResponse.json(JSON.stringify(user), {
+      status: 201,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
   } catch (err) {
     console.log("[USER_POST]", err)
     return new NextResponse("Internal error", { status: 500 })

@@ -11,7 +11,12 @@ export async function GET() {
       },
     })
 
-    return NextResponse.json(socialmediaPosts)
+    return NextResponse.json(socialmediaPosts, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
   } catch (err) {
     console.log("[SOCIALMEDIA_GET]", err)
     return new NextResponse("Internal error", { status: 500 })

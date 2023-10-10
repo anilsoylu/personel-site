@@ -24,7 +24,6 @@ import { Separator } from "@/components/ui/separator"
 import { Heading } from "@/components/ui/heading"
 import { AlertModal } from "@/components/modals/alert-modal"
 import { Textarea } from "@/components/ui/textarea"
-import { useSession } from "next-auth/react"
 
 const formSchema = z.object({
   title: z.string().min(1),
@@ -41,8 +40,6 @@ interface BookmarkFormProps {
 export const BookmarkForm: React.FC<BookmarkFormProps> = ({ initialData }) => {
   const params = useParams()
   const router = useRouter()
-  const { data: session, status } = useSession()
-  const isDemo = session?.user?.username === "demo"
   const [content, setContent] = useState(initialData?.content || "")
 
   const handleContentChange = (newValue: string) => {
@@ -80,25 +77,18 @@ export const BookmarkForm: React.FC<BookmarkFormProps> = ({ initialData }) => {
     try {
       setLoading(true)
 
-      if (isDemo && status === "authenticated") {
-        toast.error(
-          "You are not authorized. This is a demo page. Please set up your own database."
-        )
-        setLoading(false)
-      } else {
-        const postData = {
-          ...data,
-        }
-
-        if (initialData) {
-          await axios.patch(`/api/bookmark/${params.bookmarkId}`, postData)
-        } else {
-          await axios.post(`/api/bookmark`, postData)
-        }
-        router.refresh()
-        router.push(`/admpanel/bookmark`)
-        toast.success(toastMessage)
+      const postData = {
+        ...data,
       }
+
+      if (initialData) {
+        await axios.patch(`/api/bookmark/${params.bookmarkId}`, postData)
+      } else {
+        await axios.post(`/api/bookmark`, postData)
+      }
+      router.refresh()
+      router.push(`/admpanel/bookmark`)
+      toast.success(toastMessage)
     } catch (error: any) {
       toast.error("Something went wrong.")
     } finally {
@@ -109,17 +99,10 @@ export const BookmarkForm: React.FC<BookmarkFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true)
-      if (isDemo && status === "authenticated") {
-        toast.error(
-          "You are not authorized. This is a demo page. Please set up your own database."
-        )
-        setLoading(false)
-      } else {
-        await axios.delete(`/api/bookmark/${params.bookmarkId}`)
-        router.refresh()
-        router.push(`/admpanel/bookmark`)
-        toast.success("Bookmark deleted.")
-      }
+      await axios.delete(`/api/bookmark/${params.bookmarkId}`)
+      router.refresh()
+      router.push(`/admpanel/bookmark`)
+      toast.success("Bookmark deleted.")
     } catch (error: any) {
       toast.error("Something went wrong.")
     } finally {

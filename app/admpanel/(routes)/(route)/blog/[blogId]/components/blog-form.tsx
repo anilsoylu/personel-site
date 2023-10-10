@@ -30,7 +30,6 @@ import { makeSeoFriendly } from "@/lib/utils"
 import checkSeoUrl from "@/actions/check-seo-url"
 import { Textarea } from "@/components/ui/textarea"
 import ImageUpload from "@/components/ui/image-upload"
-import { useSession } from "next-auth/react"
 
 const formSchema = z.object({
   title: z.string().min(1),
@@ -55,8 +54,6 @@ interface BlogFormProps {
 export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
   const params = useParams()
   const router = useRouter()
-  const { data: session, status } = useSession()
-  const isDemo = session?.user?.username === "demo"
 
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -115,26 +112,19 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
     try {
       setLoading(true)
 
-      if (isDemo && status === "authenticated") {
-        toast.error(
-          "You are not authorized. This is a demo page. Please set up your own database."
-        )
-        setLoading(false)
-      } else {
-        const postData = {
-          ...data,
-          content: content,
-        }
-
-        if (initialData) {
-          await axios.patch(`/api/blog/${params.blogId}`, postData)
-        } else {
-          await axios.post(`/api/blog`, postData)
-        }
-        router.refresh()
-        router.push(`/admpanel/blog`)
-        toast.success(toastMessage)
+      const postData = {
+        ...data,
+        content: content,
       }
+
+      if (initialData) {
+        await axios.patch(`/api/blog/${params.blogId}`, postData)
+      } else {
+        await axios.post(`/api/blog`, postData)
+      }
+      router.refresh()
+      router.push(`/admpanel/blog`)
+      toast.success(toastMessage)
     } catch (error: any) {
       toast.error("Something went wrong.")
     } finally {
@@ -145,17 +135,10 @@ export const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true)
-      if (isDemo && status === "authenticated") {
-        toast.error(
-          "You are not authorized. This is a demo page. Please set up your own database."
-        )
-        setLoading(false)
-      } else {
-        await axios.delete(`/api/blog/${params.blogId}`)
-        router.refresh()
-        router.push(`/admpanel/blog`)
-        toast.success("Blog deleted.")
-      }
+      await axios.delete(`/api/blog/${params.blogId}`)
+      router.refresh()
+      router.push(`/admpanel/blog`)
+      toast.success("Blog deleted.")
     } catch (error: any) {
       toast.error("Something went wrong.")
     } finally {

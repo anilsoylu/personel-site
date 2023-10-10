@@ -46,7 +46,12 @@ export async function DELETE(
       },
     })
 
-    return NextResponse.json(blog)
+    return NextResponse.json(JSON.stringify(blog), {
+      status: 201,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
   } catch (err) {
     console.log("[BLOG_DELETE]", err)
     return new NextResponse("Interal eror", { status: 500 })

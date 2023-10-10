@@ -11,7 +11,12 @@ export async function GET() {
       },
     })
 
-    return NextResponse.json(bookmarkPosts)
+    return NextResponse.json(bookmarkPosts, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
   } catch (error) {
     console.log("[BOOKMARK_GET]", error)
     return new NextResponse("Internal error", { status: 500 })
